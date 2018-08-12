@@ -16,6 +16,26 @@ $ motion -c motion.conf
 $ python TelegramBot.py
 ```
 
+## Available commands
+
+Precede them with a `/`.
+
+```
+ping - pong
+snapshot - take and send a snapshot
+motion_on - enable motion detection
+motion_off - disable motion detection
+motion_status - motion detection status
+dir_picture - picture directory
+dir_movie - movie directory
+dir_snapshot - snapshot directory
+dir_timelapse - timelapse directory
+delete - <first_few_letters_of_filename>
+deletedir - <directory_name>
+```
+
+You can also download a specific picture/video by using `dir_<directory>` command.
+
 ## License
 
 `The MIT License`
