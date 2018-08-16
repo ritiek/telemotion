@@ -7,6 +7,8 @@ Make sure to edit your target directory in `motion.conf`. Then place `PiNotify.s
 you specified. Also edit the path to `PiNotify.sh` in `motion.conf` so it calls the script in the correct location when a
 motion event is triggered.
 
+This set up will automatically send you the best picture of an event to you on Telegram.
+
 ## Usage
 
 Add your token and stuff in `PiNotify.sh` and `TelegramBot.py`. Then do
