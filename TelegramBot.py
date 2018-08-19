@@ -22,10 +22,13 @@ def get_detection_status():
 
 def get_files(directory):
     files = []
-    for x in os.listdir(directory):
-        size = os.path.getsize(os.path.join(directory, x)) / 1048576.0  # MBs
-        file_str = '/{0}\n{1} MB'.format(x.split('.')[0], round(size, 2))
-        files.append(file_str)
+    for root, _, filenames in os.walk(directory):
+        print(root, filenames)
+        for filename in filenames:
+            filepath = os.path.join(root, filename)
+            size = os.path.getsize(filepath) / 1048576.0  # MBs
+            filestr = '/{0}\n{1} MB'.format(filename.split('.')[0], round(size, 2))
+            files.append(filestr)
 
     return '\n'.join(files)
 
