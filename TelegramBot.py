@@ -11,7 +11,16 @@ os.chdir(sys.path[0])
 known_chat_ids = [123456789,]
 token = "telegram_token"
 passphrase = "passphrase"
+pic_ext = 'jpg'
+mov_ext = 'avi'
 
+def get_size(directory):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(directory):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+    return total_size
 
 def get_detection_status():
     status = requests.get('http://localhost:8080/0/detection/status')
@@ -22,13 +31,21 @@ def get_detection_status():
 
 def get_files(directory):
     files = []
-    for root, _, filenames in os.walk(directory):
-        print(root, filenames)
-        for filename in filenames:
-            filepath = os.path.join(root, filename)
-            size = os.path.getsize(filepath) / 1048576.0  # MBs
+    for filename in os.listdir(directory):
+        fullpath = os.path.join(directory, filename)
+        if os.path.isfile(fullpath):
+            size = os.path.getsize(fullpath) / 1048576.0  # MBs
             filestr = '/{0}\n{1} MB'.format(filename.split('.')[0], round(size, 2))
-            files.append(filestr)
+        else:
+            size = get_size(fullpath) / 1048576.0
+            filestr = '/{0}\n{1} MB'.format(filename, round(size, 2))
+        files.append(filestr)
+    #for root, _, filenames in os.walk(directory):
+    #    for filename in filenames:
+    #        filepath = os.path.join(root, filename)
+    #        size = os.path.getsize(filepath) / 1048576.0  # MBs
+    #        filestr = '/{0}\n{1} MB'.format(filename.split('.')[0], round(size, 2))
+    #        files.append(filestr)
 
     return '\n'.join(files)
 
@@ -95,12 +112,16 @@ def handle(msg):
 
     elif command.startswith('/'):
         filename, *_ = glob.glob('**{}*'.format(command), recursive=True)
-        if filename.endswith('.jpg'):
+        if filename.endswith(pic_ext):
             bot.sendChatAction(chat_id, 'upload_photo')
             bot.sendPhoto(chat_id, open(filename, 'rb'), caption=os.path.basename(filename))
-        elif filename.endswith('.avi'):
+        elif filename.endswith(mov_ext):
             bot.sendChatAction(chat_id, 'upload_video')
             bot.sendVideo(chat_id, open(filename, 'rb'), caption=os.path.basename(filename))
+        else:
+            bot.sendChatAction(chat_id, 'typing')
+            files = get_files(filename)
+            bot.sendMessage(chat_id, files)
 
 
 bot = telepot.Bot(token)
