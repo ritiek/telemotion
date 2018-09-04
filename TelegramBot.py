@@ -11,8 +11,8 @@ os.chdir(sys.path[0])
 known_chat_ids = [123456789,]
 token = "telegram_token"
 passphrase = "passphrase"
-pic_ext = 'jpg'
-mov_ext = 'avi'
+pic_ext = '.jpg'
+mov_ext = '.avi'
 
 def get_size(directory):
     total_size = 0
